@@ -1,17 +1,18 @@
 
 
 Project: Raspberry Tea-Pi
-Names: Medha Verma and Sidhu 
+Names: Medha Verma and Sidhu Gehlaut
 
-Description: The Raspberry Tea-Pi is for all tea conisseurs who want to brew their tea at the ideal temperature and for the ideal amount   of time. It begins with the user interacting with the display which asks what type of tea the user is drinking. Then it asks  the user to place the tea bag on the arm and confirm once they have. The water heater turns on and waits till the temperature sensor reports the correct temperature for the particular type of tea. Once it reaches this point, the display shows that the ideal temperature has been reached, the boiler turns off, and the arm puts the tea bag into the water. After the tea bag  has been in the water for the ideal amount of time, the arm pulls the tea bag out of the water. The display reports that the tea is ready. 
+Description: The Raspberry Tea-Pi is for all tea conisseurs who want to brew their tea at the ideal temperature and for the ideal amount of time. It begins with the user interacting with the display which asks what type of tea the user is drinking. Then it asks  the user to place the tea bag on the arm and confirm once they have. The water heater turns on and waits till the temperature sensor reports the correct temperature for the particular type of tea. Once it reaches this point, the display shows that the ideal temperature has been reached, the boiler turns off, and the arm puts the tea bag into the water. After the tea bag  has been in the water for the ideal amount of time, the arm pulls the tea bag out of the water. The display reports that the tea is ready. 
 
 Hardware required: 
 water resistant sensor:  SUNKEE DS18B20 Temperature Sensor - Waterproof Digital Thermal Probe Sensor DS18B20DS18B20 Temperature Sensor - Waterproof Digital Thermal Probe Sensor DS18B20 $5 
-two servomotor -> get from PRL $10 each (may not need to use if use step motor) 
+one servomotor -> get from PRL $13 (may not need to use if use step motor)
+Power relay: Iot Relay - Enclosed High-Power Power Relay for Arduino, Raspberry Pi, PIC or WiFi, Relay Shield $ 7
 some type of arm-> can be made  
 wheels for turning -> can be made 
 
-Funds requested : ~$40, may be a bit less 
+Funds requested : $40; we can cover the extra $5
 Major task breakdown: 
 1. get the temperature sensor to report correct temperature, and show it on the display(extension: play a tune) 
 2. turn the lever on the water boiler on and off (build all the parts for it) 

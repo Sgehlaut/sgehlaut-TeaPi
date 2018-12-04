@@ -1,5 +1,5 @@
-APPLICATION = apps/console_shell
-MY_MODULES = shell.o console.o gl.o fb.o
+APPLICATION = apps/main
+MY_MODULES = display.o
 
 #  malloc.o backtrace.o printf.o strings.o gpio.o timer.o
 #  Can be added to MY_MODULES to use your own code

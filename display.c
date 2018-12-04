@@ -8,37 +8,120 @@
 #include "malloc.h"
 #include "printf.h"
 #include "strings.h"
+#include "timer.h"
+#include "display.h"
 
-#define LINE_LEN 80
+static const teaStruct teaList[] = {
+    {"Black", 93, 100, 4},
+    {"Green", 82,  85, 3},
+    {"White", 79,  85, 2},
+};
 
-typedef struct {
-	char teaType[LINE_LEN];
-	int teaTemp;
-	int teaBrewTime;
-} teaStruct;
+/*
+ * Functions strndup, isspace, and tokenize copied from lab4.
+ */
 
-void fillInTeaInfo(char buf[]) 
+/*
+ * Returns a pointer to a new null-terminated string containing at most 'n'
+ * bytes copied from the string pointed to by 'src'.
+ *
+ * Example: strndup("cs107e", 4) == "cs10"
+ */
+static char *strndup(const char *src, int n)
 {
-	//Function will access a data structure in order to fill in the current tea struct
+    char *dst = malloc(n + 1);
+    dst[n] = '\0';
+    return memcpy(dst, src, n);
 }
 
-bool display_readTeaType(char buf[], int bufsize)
+static int isspace(char ch)
 {
-	//Given a type of tea, it will call fillInTeaInfo and return true if the type was filled in.
+    return ch == ' ' || ch == '\t' || ch == '\n';
+}
+
+static int tokenize(const char *line, const char *array[], int max)
+{
+    int ntokens = 0;
+
+    while (*line != '\0' && ntokens < max) {
+        while (isspace(*line)) line++;  // skip past spaces
+        if (*line == '\0') break; // no more non-white chars
+        const char *start = line;
+        while (*line != '\0' && !isspace(*line)) line++; // advance to next space/null
+        int nchars = line - start;
+        array[ntokens++] = strndup(start, nchars);   // make heap-copy, add to array
+    }
+    return ntokens;
+}
+
+bool teaType_evaluate(const char *teaName, teaStruct currTea)
+{
+    const char *argv[strlen(teaName)];
+    tokenize(teaName, argv, strlen(teaName));
+    if(strcmp(argv[0], "Black") == 0) {
+        currTea = teaList[0];
+        return true;
+    }
+    else if(strcmp(argv[0], "Green") == 0) {
+        currTea = teaList[1];
+        return true;
+    }
+    else if(strcmp(argv[0], "White") == 0) {
+        currTea = teaList[2];
+        return true;
+    }
+    else 
+    {
+        printf("Error: '%s' isn't a recognized type of tea.\n", argv[0]);
+        return false;
+    }
+}
+
+bool yesOrNo_evaluate() 
+{
+	char bagConfirmation[LINE_LEN];
+	printf("Please place the tea-bag on the arm. Once you've done so, type 'Yes' to confirm!\n");
+	shell_readline(bagConfirmation, sizeof(bagConfirmation));
+	const char *argv[strlen(bagConfirmation)];
+    tokenize(bagConfirmation, argv, strlen(bagConfirmation));
+    if(strcmp(argv[0], "Yes") == 0) {
+    	printf("Thank you for confirming!\n");
+        return true;
+    }
+    else {
+    	printf("Please type 'Yes' to confirm.\n");
+    	return false;
+    }
+
 }
 
 //The "main" function call. It will call all the functions and make a working display.
 void display_run(void)
 {
 	teaStruct todaysTea;
-	todaysTea.teaType = '';
+	int currTemp = 0; //Replace with the temperature read from the sensor
 	bool isTea = false;
-	display_printf("Welcome to your Raspberry Pi-Tea Experience. Remember to type on your PS/2 keyboard!\n");
+	printf("Welcome to your Raspberry Pi-Tea Experience! Please type using your PS/2 Keyboard.\n");
 
-	while (teaType == ) 
+	while (isTea == false) 
     {
         printf("What type of tea will you be enjoying today?\n");
-        isTea = display_readTeaType(teaType, sizeof(teaType));
-        teaType_evaluate(teaType, todaysTea);
+        shell_readline(todaysTea.teaType, sizeof(todaysTea.teaType));
+        isTea = teaType_evaluate(todaysTea.teaType, todaysTea);
     }
+
+    printf("%s Tea is a great choice!\n", todaysTea.teaType);
+
+    while(yesOrNo_evaluate() == false) {}
+
+    while (currTemp < todaysTea.teaTempMax)
+    {
+    	//This while loop will read temperature until it hits the ideal temperature for the first time!
+    }
+
+    // while()
+    // {
+
+    // }
 }
+

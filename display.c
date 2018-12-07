@@ -10,6 +10,7 @@
 #include "strings.h"
 #include "timer.h"
 #include "display.h"
+#include "gpio.h"
 
 static const teaStruct teaList[] = {
     {"Black", 93, 100, 4},
@@ -118,6 +119,22 @@ void display_run(void)
     {
     	//This while loop will read temperature until it hits the ideal temperature for the first time!
     }
+// This chunk of code is the code for the power tail. NEED TO REORGANIZE
+
+int relay = GPIO_PIN121;          	// Tells Arduino the relay is connected to pin 13
+
+timer_init();
+gpio_init();
+gpio_set_output(relay);
+
+void loop()              	// Loops forever
+{
+gpio_write(relay, 1);   // Turn the relay on (HIGH is the voltage level = 1)
+timer_delay(5);             	// Stay ON for 5 seconds
+gpio_write(relay, 0);	// Turn the relay off by making the voltage LOW = 0
+timer_delay(5);             	// Stay OFF for 5 seconds
+} 
+
 
     // while()
     // {

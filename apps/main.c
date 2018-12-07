@@ -11,9 +11,9 @@ void main(void)
     uart_init();
     keyboard_init();
     shell_init(printf);
-    begin(); 
-    setPWMFreq(60); 
-    setPWM(0, 1000, 2000); 
+    //begin(); 
+    //setPWMFreq(60); 
+    //setPWM(0, 1000, 2000); 
 
-    //display_run();
+    display_run();
 }

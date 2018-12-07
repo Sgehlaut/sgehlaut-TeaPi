@@ -128,7 +128,7 @@ void display_run(void)
     setPWMFreq(60);
     setPWM(0, 1000, 2000); 
     timer_delay(2);
-    setPWM(0, 0, 4096); i
+    setPWM(0, 0, 4096); 
 
 
     // while (currTemp < todaysTea.teaTempMax)

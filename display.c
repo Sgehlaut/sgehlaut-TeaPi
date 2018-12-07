@@ -10,7 +10,7 @@
 #include "strings.h"
 #include "timer.h"
 #include "display.h"
-
+#include "motor.h"
 static const teaStruct teaList[] = {
     {"Black", 93, 100, 4},
     {"Green", 82,  85, 3},
@@ -111,13 +111,30 @@ void display_run(void)
     }
 
     printf("%s Tea is a great choice!\n", todaysTea.teaType);
+    printf("%s\n", "Now placing tea bag into kettle");
+
+
 
     while(yesOrNo_evaluate() == false) {}
 
-    while (currTemp < todaysTea.teaTempMax)
-    {
-    	//This while loop will read temperature until it hits the ideal temperature for the first time!
-    }
+    begin(); 
+    setPWMFreq(200); 
+    setPWM(0, 1000, 2000); 
+    timer_delay(2); 
+    //setPWMFreq(0); 
+    setPWM(0, 0, 4096); 
+    //display_run();
+    timer_delay(2);
+    setPWMFreq(60);
+    setPWM(0, 1000, 2000); 
+    timer_delay(2);
+    setPWM(0, 0, 4096); i
+
+
+    // while (currTemp < todaysTea.teaTempMax)
+    // {
+    // 	//This while loop will read temperature until it hits the ideal temperature for the first time!
+    // }
 
     // while()
     // {

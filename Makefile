@@ -1,5 +1,5 @@
 APPLICATION = apps/main
-MY_MODULES = display.o
+MY_MODULES = display.o motor.o i2c.o
 
 #  malloc.o backtrace.o printf.o strings.o gpio.o timer.o
 #  Can be added to MY_MODULES to use your own code
@@ -26,7 +26,7 @@ MY_MODULES = display.o
 CFLAGS = -I$(CS107E)/include -g -Wall -Og -std=c99 -ffreestanding 
 CFLAGS += -mapcs-frame -fno-omit-frame-pointer -mpoke-function-name -Wpointer-arith
 LDFLAGS = -nostdlib -T memmap -L$(CS107E)/lib
-LDLIBS = -lpi -lgcc
+LDLIBS = -lpi -lm -lgcc 
 
 all : $(APPLICATION).bin $(MY_MODULES)
 

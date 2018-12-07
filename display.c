@@ -79,18 +79,18 @@ bool teaType_evaluate(const char *teaName, teaStruct currTea)
 
 bool yesOrNo_evaluate() 
 {
-	char bagConfirmation[LINE_LEN];
-	printf("Please place the tea-bag on the arm. Once you've done so, type 'Yes' to confirm!\n");
-	shell_readline(bagConfirmation, sizeof(bagConfirmation));
-	const char *argv[strlen(bagConfirmation)];
+    char bagConfirmation[LINE_LEN];
+    printf("Please place the tea-bag on the arm. Once you've done so, type 'Yes' to confirm!\n");
+    shell_readline(bagConfirmation, sizeof(bagConfirmation));
+    const char *argv[strlen(bagConfirmation)];
     tokenize(bagConfirmation, argv, strlen(bagConfirmation));
     if(strcmp(argv[0], "Yes") == 0) {
-    	printf("Thank you for confirming!\n");
+        printf("Thank you for confirming!\n");
         return true;
     }
     else {
-    	printf("Please type 'Yes' to confirm.\n");
-    	return false;
+        printf("Please type 'Yes' to confirm.\n");
+        return false;
     }
 
 }
@@ -98,12 +98,12 @@ bool yesOrNo_evaluate()
 //The "main" function call. It will call all the functions and make a working display.
 void display_run(void)
 {
-	teaStruct todaysTea;
-	int currTemp = 0; //Replace with the temperature read from the sensor
-	bool isTea = false;
-	printf("Welcome to your Raspberry Pi-Tea Experience! Please type using your PS/2 Keyboard.\n");
+    teaStruct todaysTea;
+    int currTemp = 0; //Replace with the temperature read from the sensor
+    bool isTea = false;
+    printf("Welcome to your Raspberry Pi-Tea Experience! Please type using your PS/2 Keyboard.\n");
 
-	while (isTea == false) 
+    while (isTea == false) 
     {
         printf("What type of tea will you be enjoying today?\n");
         shell_readline(todaysTea.teaType, sizeof(todaysTea.teaType));
@@ -133,7 +133,7 @@ void display_run(void)
 
     // while (currTemp < todaysTea.teaTempMax)
     // {
-    // 	//This while loop will read temperature until it hits the ideal temperature for the first time!
+    //  //This while loop will read temperature until it hits the ideal temperature for the first time!
     // }
 
     // while()
@@ -141,4 +141,3 @@ void display_run(void)
 
     // }
 }
-

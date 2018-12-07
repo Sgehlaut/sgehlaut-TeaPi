@@ -10,8 +10,7 @@
 #include "strings.h"
 #include "timer.h"
 #include "display.h"
-#include "gpio.h"
-
+#include "motor.h"
 static const teaStruct teaList[] = {
     {"Black", 93, 100, 4},
     {"Green", 82,  85, 3},
@@ -80,18 +79,18 @@ bool teaType_evaluate(const char *teaName, teaStruct currTea)
 
 bool yesOrNo_evaluate() 
 {
-	char bagConfirmation[LINE_LEN];
-	printf("Please place the tea-bag on the arm. Once you've done so, type 'Yes' to confirm!\n");
-	shell_readline(bagConfirmation, sizeof(bagConfirmation));
-	const char *argv[strlen(bagConfirmation)];
+    char bagConfirmation[LINE_LEN];
+    printf("Please place the tea-bag on the arm. Once you've done so, type 'Yes' to confirm!\n");
+    shell_readline(bagConfirmation, sizeof(bagConfirmation));
+    const char *argv[strlen(bagConfirmation)];
     tokenize(bagConfirmation, argv, strlen(bagConfirmation));
     if(strcmp(argv[0], "Yes") == 0) {
-    	printf("Thank you for confirming!\n");
+        printf("Thank you for confirming!\n");
         return true;
     }
     else {
-    	printf("Please type 'Yes' to confirm.\n");
-    	return false;
+        printf("Please type 'Yes' to confirm.\n");
+        return false;
     }
 
 }
@@ -99,12 +98,12 @@ bool yesOrNo_evaluate()
 //The "main" function call. It will call all the functions and make a working display.
 void display_run(void)
 {
-	teaStruct todaysTea;
-	int currTemp = 0; //Replace with the temperature read from the sensor
-	bool isTea = false;
-	printf("Welcome to your Raspberry Pi-Tea Experience! Please type using your PS/2 Keyboard.\n");
+    teaStruct todaysTea;
+    int currTemp = 0; //Replace with the temperature read from the sensor
+    bool isTea = false;
+    printf("Welcome to your Raspberry Pi-Tea Experience! Please type using your PS/2 Keyboard.\n");
 
-	while (isTea == false) 
+    while (isTea == false) 
     {
         printf("What type of tea will you be enjoying today?\n");
         shell_readline(todaysTea.teaType, sizeof(todaysTea.teaType));
@@ -112,33 +111,33 @@ void display_run(void)
     }
 
     printf("%s Tea is a great choice!\n", todaysTea.teaType);
+    printf("%s\n", "Now placing tea bag into kettle");
+
+
 
     while(yesOrNo_evaluate() == false) {}
 
-    while (currTemp < todaysTea.teaTempMax)
-    {
-    	//This while loop will read temperature until it hits the ideal temperature for the first time!
-    }
-// This chunk of code is the code for the power tail. NEED TO REORGANIZE
+    begin(); 
+    setPWMFreq(200); 
+    setPWM(0, 1000, 2000); 
+    timer_delay(2); 
+    //setPWMFreq(0); 
+    setPWM(0, 0, 4096); 
+    //display_run();
+    timer_delay(2);
+    setPWMFreq(60);
+    setPWM(0, 1000, 2000); 
+    timer_delay(2);
+    setPWM(0, 0, 4096); 
 
-int relay = GPIO_PIN121;          	// Tells Arduino the relay is connected to pin 13
 
-timer_init();
-gpio_init();
-gpio_set_output(relay);
-
-void loop()              	// Loops forever
-{
-gpio_write(relay, 1);   // Turn the relay on (HIGH is the voltage level = 1)
-timer_delay(5);             	// Stay ON for 5 seconds
-gpio_write(relay, 0);	// Turn the relay off by making the voltage LOW = 0
-timer_delay(5);             	// Stay OFF for 5 seconds
-} 
-
+    // while (currTemp < todaysTea.teaTempMax)
+    // {
+    //  //This while loop will read temperature until it hits the ideal temperature for the first time!
+    // }
 
     // while()
     // {
 
     // }
 }
-

@@ -1,6 +1,24 @@
 #include "i2c.h" 
+#include "motor.h"
+#include "timer.h"
+#include "math.h"
 
-typedef unsigned char uint8_t; 
+unsigned _i2c = 0x40; 
+
+uint8_t read8(uint8_t addr) {
+	i2c_write(_i2c, (char *)&addr, 1);
+	char byte_read; 
+	i2c_read(_i2c, &byte_read, 1); 
+	return byte_read; 
+
+}
+
+void write8(uint8_t addr, uint8_t d){
+	char array[2]; 
+	array[0] = addr; 
+	array[1] = d; 
+	i2c_write(_i2c, &array[0], 2); 
+}
 
 void setPWMFreq(float freq){
 
@@ -10,41 +28,31 @@ void setPWMFreq(float freq){
   prescaleval /= freq;
   prescaleval -= 1;
 
+  uint8_t prescale = floor(prescaleval + 0.5);
+
 
   uint8_t oldmode = read8(PCA9685_MODE1);
   uint8_t newmode = (oldmode&0x7F) | 0x10; // sleep
   write8(PCA9685_MODE1, newmode); // go to sleep
   write8(PCA9685_PRESCALE, prescale); // set the prescaler
   write8(PCA9685_MODE1, oldmode);
-  delay(5);
   write8(PCA9685_MODE1, oldmode | 0xa0);  //  This sets the MODE1 register to turn on auto increment.
 }
 
 
 
-void read8(uint8_t addr) {
-	i2c_write(_i2c, &addr, 1);
-	char byte_read; 
-	read(_i2c, &byte_read, 1); 
-
-}
-
-void write8(uint8_t addr, uint8_t d){
-	i2c_write(_i2c, &addr, 1); 
-	i2c_write(_i2c, d, 1); 
-}
-
 
 void begin(){
-	i2c.init(); 
+	i2c_init();
 	reset(); 
 	setPWMFreq(1000); 
 }
 
 void reset(){
-	// store as a data length 
+	// store as a data length
+	timer_delay(1);
 	write8(PCA9685_MODE1, 0x80); 
-	delay(10); 
+
 
 } 
 

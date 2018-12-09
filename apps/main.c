@@ -11,6 +11,8 @@ void main(void)
 {
     uart_init();
     keyboard_init();
+    timer_init();
+	gpio_init();
     shell_init(printf);
     display_run();
    

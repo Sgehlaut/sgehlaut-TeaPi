@@ -113,11 +113,19 @@ void display_run(void)
     printf("%s Tea is a great choice!\n", todaysTea.teaType);
     printf("%s\n", "Now placing tea bag into kettle");
 
+    int teaPin = GPIO_PIN21;             // Tells Pi the relay is connected to pin 21
 
+
+    gpio_set_output(relay);
+
+    gpio_write(relay, 1);   // Turn the relay on (HIGH is the voltage level = 1)
+    timer_delay(5);                 // Stay ON for 5 seconds
+    gpio_write(relay, 0);   // Turn the relay off by making the voltage LOW = 0
+    timer_delay(5);                 // Stay OFF for 5 seconds
 
     while(yesOrNo_evaluate() == false) {}
 
-    begin(); 
+/*    begin(); 
     setPWMFreq(200); 
     setPWM(0, 1000, 2000); 
     timer_delay(2); 
@@ -128,7 +136,8 @@ void display_run(void)
     setPWMFreq(60);
     setPWM(0, 1000, 2000); 
     timer_delay(2);
-    setPWM(0, 0, 4096); 
+    setPWM(0, 0, 4096);
+*/ 
 
 
     // while (currTemp < todaysTea.teaTempMax)

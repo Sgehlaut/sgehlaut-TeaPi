@@ -60,7 +60,10 @@ uint8_t _reset(ds18b20_t *p)
     dq = 1;
 
     // pull bus low for Trstl (480us)
-    GPIO_CLR = 1 << pin;
+    //GPIO_CLR = 1 << pin;
+
+    gpio_write(pin, 1);
+
     gpio_set_output(pin);
     timer_delay_ms(Trstl);
 
@@ -100,7 +103,10 @@ uint8_t _write_byte(ds18b20_t *p, uint8_t data)
             ** write 0
             ** pull bus low for Tlow0 (60us) then release
             */
-            GPIO_CLR = 1 << pin;
+            //GPIO_CLR = 1 << pin;
+
+            gpio_write(pin, 1);
+
             gpio_set_output(pin);
             timer_delay_ms(Tlow0);
             gpio_set_input(pin);
@@ -109,7 +115,10 @@ uint8_t _write_byte(ds18b20_t *p, uint8_t data)
         {
             /* write 1 */
             /* pull bus low for Tlow1, then release and wait rest of slot */
-            GPIO_CLR = 1 << pin;
+            //GPIO_CLR = 1 << pin;
+
+            gpio_write(pin, 1);
+
             gpio_set_output(pin);
             timer_delay_ms(Tlow1);
             gpio_set_input(pin);
@@ -128,8 +137,7 @@ uint8_t _write_byte(ds18b20_t *p, uint8_t data)
 
 uint8_t _read_bit(ds18b20_t *p)
 {
-
-    int     n;
+    //int     n;
     uint8_t pin;
     uint8_t ch;
 
@@ -142,7 +150,10 @@ uint8_t _read_bit(ds18b20_t *p)
     ** then release and wait a bit before sampling
     ** should sample close to but before expiration of Trdv
     */
-    GPIO_CLR = 1 << pin;
+    //GPIO_CLR = 1 << pin;
+
+    gpio_write(pin, 1);
+
     gpio_set_output(pin);
     timer_delay_ms(Tread);
 
@@ -162,11 +173,10 @@ uint8_t _read_byte(ds18b20_t *p)
 {
 
     int     n;
-    uint8_t pin;
     uint8_t ch;
     uint8_t data;
 
-    pin  = p->pin;
+    //pin  = p->pin;
 
     ch = 0;
     data = 0;

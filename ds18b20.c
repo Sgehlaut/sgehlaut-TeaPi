@@ -1,8 +1,9 @@
 #include "gpio.h"
 #include "ds18b20.h"
-//#include "crc1w.h"
+#include "crc1w.h"
 #include "timer.h"
 #include "math.h"
+#include <stdint.h>
 
 
 
@@ -208,7 +209,7 @@ uint8_t ds18b20_init(ds18b20_t *p)
 }
 
 
-int16_t ds18b20_read_temperature(ds18b20_t *p)
+uint16_t ds18b20_read_temperature(ds18b20_t *p)
 {
     int n;
     int attempt;

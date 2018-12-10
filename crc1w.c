@@ -1,5 +1,7 @@
 #include "crc1w.h"
 #include "malloc.h"
+#include "math.h"
+
 
 
 

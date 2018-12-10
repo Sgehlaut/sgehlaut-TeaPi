@@ -4,10 +4,12 @@
 
 #include "gpio.h"
 #include "ds18b20.h"
-//#include "crc1w.h"
+#include "crc1w.h"
 #include "timer.h"
 #include "math.h"
+#include <stdint.h>
 
+#define Tslot		60	// minimum
 #define Trec		1	// minimum
 #define Tlow0		60	// minimum
 #define Tlow1		1	// minimum
@@ -61,7 +63,7 @@ typedef struct ds18b20
 } ds18b20_t;
 
 /* use lookup table for Tconv */
-const uint Tconv[4] = {93750, 187500, 375000, 750000};
+const int Tconv[4] = {93750, 187500, 375000, 750000};
 
 uint8_t ds18b20_init(ds18b20_t*);
 uint16_t ds18b20_read_temperature(ds18b20_t*);

@@ -47,6 +47,7 @@
 
 /* mask values to filter out higher resolution bits */
 const uint8_t fmask[4] = {0x08, 0x0c, 0x0e, 0x0f};
+volatile const int Tconv[4] = {93750, 187500, 375000, 750000};
 
 
 
@@ -62,18 +63,17 @@ uint8_t _reset(ds18b20_t *p)
     // pull bus low for Trstl (480us)
     //GPIO_CLR = 1 << pin;
 
-    gpio_write(pin, 1);
-
     gpio_set_output(pin);
-    timer_delay_ms(Trstl);
+    gpio_write(pin, 0); 
+    timer_delay_us(600);
 
     // then release and wait a bit before sampling
     gpio_set_input(pin);
-    timer_delay_ms(Trstwait);
+    timer_delay_us(Trstwait);
     dq = gpio_read(pin);
 
-    /* need to wait the rest of the Trsth time */
-    timer_delay_ms(Trsth - Trstwait);
+     //need to wait the rest of the Trsth time 
+    timer_delay_us(Trsth - Trstwait);
 
     /* DQ=LOW  <-> present (return TRUE) */
     /* DQ=HIGH <-> not present (return FALSE) */
@@ -104,11 +104,10 @@ uint8_t _write_byte(ds18b20_t *p, uint8_t data)
             ** pull bus low for Tlow0 (60us) then release
             */
             //GPIO_CLR = 1 << pin;
-
-            gpio_write(pin, 1);
-
+          
             gpio_set_output(pin);
-            timer_delay_ms(Tlow0);
+            gpio_write(pin, 0);
+            timer_delay_us(Tlow0);
             gpio_set_input(pin);
         }
         else
@@ -117,16 +116,17 @@ uint8_t _write_byte(ds18b20_t *p, uint8_t data)
             /* pull bus low for Tlow1, then release and wait rest of slot */
             //GPIO_CLR = 1 << pin;
 
-            gpio_write(pin, 1);
+           
 
             gpio_set_output(pin);
-            timer_delay_ms(Tlow1);
+            gpio_write(pin, 0);
+            timer_delay_us(Tlow1);
             gpio_set_input(pin);
-            timer_delay_ms(Tslot - Tlow1);
+            timer_delay_us(Tslot - Tlow1);
         }
 
             /* must wait Trec time after each bit is transmitted */
-             timer_delay_ms(Trec);
+             timer_delay_us(Trec);
 
         ch = ch >> 1;
     }
@@ -152,17 +152,18 @@ uint8_t _read_bit(ds18b20_t *p)
     */
     //GPIO_CLR = 1 << pin;
 
-    gpio_write(pin, 1);
+
 
     gpio_set_output(pin);
-    timer_delay_ms(Tread);
+    gpio_write(pin, 0);
+    timer_delay_us(Tread);
 
     gpio_set_input(pin);
-    timer_delay_ms(Trdv - Tread - 2);
+    timer_delay_us(Trdv - Tread - 2);
     ch = gpio_read(pin);
 
     /* then wait the rest of slot + recovery time */
-    timer_delay_ms(Tslot - Trdv + 2 + Trec);
+    timer_delay_us(Tslot - Trdv + 2 + Trec);
 
     return ch;
 }
@@ -201,7 +202,7 @@ uint8_t ds18b20_init(ds18b20_t *p)
 /* struct *p must have port and pin values set before this function is called */
     uint8_t pin;
 
-    gpio_init(); 
+    //gpio_init(); 
     p->configvalid = FALSE;
     p->present = FALSE;
 
@@ -251,7 +252,7 @@ uint16_t ds18b20_read_temperature(ds18b20_t *p)
         res_index = p->scratchpad[CONFIG] / 32;
         if (res_index > 3)
             res_index = 3;
-        timer_delay_ms(Tconv[res_index]);
+        timer_delay_us(Tconv[res_index]);
 
         /*  if temperature conversion is still not complete, return an error */
         if (_read_bit(p) == 0)

@@ -99,7 +99,7 @@ bool yesOrNo_evaluate()
 void display_run(void)
 {
     teaStruct todaysTea;
-    int currTemp = 0; //Replace with the temperature read from the sensor
+    // int currTemp = 0; //Replace with the temperature read from the sensor
     bool isTea = false;
     printf("Welcome to your Raspberry Pi-Tea Experience! Please type using your PS/2 Keyboard.\n");
 
@@ -115,12 +115,11 @@ void display_run(void)
 
     int teaPin = GPIO_PIN21;             // Tells Pi the relay is connected to pin 21
 
+    gpio_set_output(teaPin);
 
-    gpio_set_output(relay);
-
-    gpio_write(relay, 1);   // Turn the relay on (HIGH is the voltage level = 1)
+    gpio_write(teaPin, 1);   // Turn the relay on (HIGH is the voltage level = 1)
     timer_delay(5);                 // Stay ON for 5 seconds
-    gpio_write(relay, 0);   // Turn the relay off by making the voltage LOW = 0
+    gpio_write(teaPin, 0);   // Turn the relay off by making the voltage LOW = 0
     timer_delay(5);                 // Stay OFF for 5 seconds
 
     while(yesOrNo_evaluate() == false) {}

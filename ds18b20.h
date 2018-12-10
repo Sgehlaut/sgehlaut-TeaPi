@@ -4,7 +4,7 @@
 
 #include "gpio.h"
 #include "ds18b20.h"
-#include "crc1w.h"
+//#include "crc1w.h"
 #include "timer.h"
 #include "math.h"
 
@@ -42,19 +42,19 @@
 #define EBADCRC		10120	/* CRC error */
 
 
-typedef u_int8_t uint8_t;
+typedef uint8_t u_int8_t;
 
 typedef struct ds18b20
 {
-    int8_t    present;
+    uint8_t    present;
 
     uint8_t   pin;
 
-    int8_t    tempint;
-    int8_t    tempfrac;
-    int8_t    temphigh;
-    int8_t    templow;
-    int8_t    configvalid;
+    uint8_t    tempint;
+    uint8_t    tempfrac;
+    uint8_t    temphigh;
+    uint8_t    templow;
+    uint8_t    configvalid;
     uint8_t   resolution;
 
     uint8_t   scratchpad[SCRATCHPAD_SIZE];
@@ -64,7 +64,7 @@ typedef struct ds18b20
 const uint Tconv[4] = {93750, 187500, 375000, 750000};
 
 uint8_t ds18b20_init(ds18b20_t*);
-int16_t ds18b20_read_temperature(ds18b20_t*);
+uint16_t ds18b20_read_temperature(ds18b20_t*);
 uint8_t _read_byte(ds18b20_t *p);
 uint8_t _write_byte(ds18b20_t *p, uint8_t data);
 uint8_t _reset(ds18b20_t *p);

@@ -1,6 +1,6 @@
 #include "gpio.h"
 #include "ds18b20.h"
-#include "crc1w.h"
+//#include "crc1w.h"
 #include "timer.h"
 #include "math.h"
 

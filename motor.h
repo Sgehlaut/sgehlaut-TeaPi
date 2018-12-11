@@ -62,4 +62,13 @@ uint8_t read8(uint8_t addr);
 */ 
 void write8(uint8_t addr, uint8_t d); 
 
+
+/* teaBagFunction
+*
+*/
+
+void lowerTea(void);
+
+void raiseTea(void);
+
 #endif 

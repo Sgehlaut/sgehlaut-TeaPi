@@ -52,8 +52,6 @@ void reset(){
 	// store as a data length
 	timer_delay(1);
 	write8(PCA9685_MODE1, 0x80); 
-
-
 } 
 
 
@@ -68,6 +66,20 @@ void setPWM(uint8_t num, uint16_t on, uint16_t off){
 	i2c_write(_i2c, data, 5); 
 }
 
+void lowerTea(){
+	begin(); 
+    setPWMFreq(200); 
+    setPWM(0, 1000, 2000); 
+    timer_delay(5); 
+    setPWM(0, 0, 4096); 
+}
+
+void raiseTea(){
+    setPWMFreq(60);
+    setPWM(0, 1000, 2000); 
+    timer_delay(5);
+    setPWM(0, 0, 4096);
+}
 
 
 

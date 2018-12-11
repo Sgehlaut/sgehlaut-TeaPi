@@ -17,7 +17,7 @@ typedef struct {
 
 //Given a type of tea, it will call fillInTeaInfo and return true if the type was filled in.
 //This function could alternatively access an array that we wrote earlier.
-bool teaType_evaluate(const char *teaName, teaStruct currTea);
+teaStruct teaType_evaluate(const char *teaName, teaStruct currTea);
 
 //The "main" function call. It will call all the functions and make a working display.
 void display_run(void);

@@ -15,7 +15,7 @@
 #include "relay.h"
 
 static const teaStruct teaList[] = {
-    {"Black", 93, 100, 4},
+    {"Black", 93, 99, 4},
     {"Green", 82,  85, 3},
     {"White", 79,  85, 2}, // 
 };
@@ -152,7 +152,7 @@ void display_run(void) {
         currTemp = (double) tempint + (double) tempfrac / 16.0;
 
         timer_delay(2);
-        printf("%d\n", currTemp);
+        printf("Current Temperature: %d\n", currTemp);
     }
 
     deactivateSwitch(relayPin);
@@ -173,9 +173,9 @@ void display_run(void) {
         unsigned int hundreds_seconds = (tick_value/100) % 100;
         int newTotalSeconds = unit_seconds + (tens_seconds * 10) + (hundreds_seconds * 100);
 
-        if(newTotalSeconds > totalSeconds) {
+        if(newTotalSeconds >= (totalSeconds+30)) {
             totalSeconds = newTotalSeconds;
-            printf("%d\n", totalSeconds);
+            printf("It has been %d seconds.\n", totalSeconds);
         }
 
         currTemp16 = ds18b20_read_temperature(&dev);
@@ -183,7 +183,7 @@ void display_run(void) {
         tempfrac = currTemp16 & 0x0f;
         currTemp = (double) tempint + (double) tempfrac / 16.0;
 
-        if(currTemp > todaysTea.teaTempMax) {
+        if(currTemp > (todaysTea.teaTempMin + 5)) {
             deactivateSwitch(relayPin);
         }
         if(currTemp < todaysTea.teaTempMin) {

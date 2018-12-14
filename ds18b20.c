@@ -60,9 +60,8 @@ uint8_t _reset(ds18b20_t *p)
     pin = p->pin;
     dq = 1;
 
-    // pull bus low for Trstl (480us)
-    //GPIO_CLR = 1 << pin;
-
+    // reads both input and output, so sets pin to output and clears it then delays before setting as
+    //input
     gpio_set_output(pin);
     gpio_write(pin, 0); 
     timer_delay_us(600);
@@ -93,18 +92,15 @@ uint8_t _write_byte(ds18b20_t *p, uint8_t data)
     pin  = p->pin;
 
     ch = data;
+    // writes 8 bits of code 
     for (n = 0; n < 8; n++)
     {
         bit = ch % 2;
 
         if (bit == 0)
         {
-            /*
-            ** write 0
-            ** pull bus low for Tlow0 (60us) then release
-            */
-            //GPIO_CLR = 1 << pin;
           
+          // sets pin as output then input 
             gpio_set_output(pin);
             gpio_write(pin, 0);
             timer_delay_us(Tlow0);
@@ -115,9 +111,6 @@ uint8_t _write_byte(ds18b20_t *p, uint8_t data)
             /* write 1 */
             /* pull bus low for Tlow1, then release and wait rest of slot */
             //GPIO_CLR = 1 << pin;
-
-           
-
             gpio_set_output(pin);
             gpio_write(pin, 0);
             timer_delay_us(Tlow1);
@@ -150,9 +143,6 @@ uint8_t _read_bit(ds18b20_t *p)
     ** then release and wait a bit before sampling
     ** should sample close to but before expiration of Trdv
     */
-    //GPIO_CLR = 1 << pin;
-
-
 
     gpio_set_output(pin);
     gpio_write(pin, 0);

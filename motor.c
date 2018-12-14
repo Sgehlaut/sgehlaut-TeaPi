@@ -17,6 +17,7 @@ void write8(uint8_t addr, uint8_t d){
 	char array[2]; 
 	array[0] = addr; 
 	array[1] = d; 
+	// takes a pointer to the array and writes to the i2c 
 	i2c_write(_i2c, &array[0], 2); 
 }
 
@@ -63,19 +64,25 @@ void setPWM(uint8_t num, uint16_t on, uint16_t off){
 	i2c_write(_i2c, data, 5); 
 }
 
+
+// method lowers the tea bag 
 void lowerTea(){
 	begin(); 
+	// turns clockwise
     setPWMFreq(200); 
     setPWM(0, 1000, 2000); 
     timer_delay(10); 
+    // turns it off 
     setPWM(0, 0, 4096); 
 }
 
 void raiseTea(){
 	begin(); 
+	// counter clockwise 
     setPWMFreq(60);
     setPWM(0, 1000, 2000); 
     timer_delay(10);
+    // turns it off 
     setPWM(0, 0, 4096);
 }
 

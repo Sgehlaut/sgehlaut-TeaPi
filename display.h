@@ -10,11 +10,6 @@ typedef struct {
 	int teaBrewTime; //The ideal brewing time
 } teaStruct;
 
-//Function will access a global data structure in order to fill in the current tea struct
-//Could look like shell_evaluate?
-// void fillInTeaInfo(char buf[]);
-
-
 //Given a type of tea, it will call fillInTeaInfo and return true if the type was filled in.
 //This function could alternatively access an array that we wrote earlier.
 teaStruct teaType_evaluate(const char *teaName, teaStruct currTea);

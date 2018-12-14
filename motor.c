@@ -70,7 +70,7 @@ void lowerTea(){
 	begin(); 
     setPWMFreq(200); 
     setPWM(0, 1000, 2000); 
-    timer_delay(8); 
+    timer_delay(10); 
     setPWM(0, 0, 4096); 
 }
 
@@ -78,7 +78,7 @@ void raiseTea(){
 	begin(); 
     setPWMFreq(60);
     setPWM(0, 1000, 2000); 
-    timer_delay(8);
+    timer_delay(10);
     setPWM(0, 0, 4096);
 }
 

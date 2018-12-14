@@ -13,6 +13,7 @@
 #include "motor.h"
 #include "ds18b20.h"
 #include "relay.h"
+#include "temperature.h"
 
 static const teaStruct teaList[] = {
     {"Black", 93, 99, 4},
@@ -89,7 +90,7 @@ teaStruct teaType_evaluate(const char *teaName, teaStruct currTea)
 bool yesOrNo_evaluate() 
 {
     char bagConfirmation[LINE_LEN];
-    printf("Please place the tea-bag on the arm. Once you've done so, type 'Yes' to confirm!\n");
+    printf("Please place the tea bag on the pin. Once you've done so, type 'Yes' to confirm!\n");
     shell_readline(bagConfirmation, sizeof(bagConfirmation));
     const char *argv[strlen(bagConfirmation)];
     tokenize(bagConfirmation, argv, strlen(bagConfirmation));
@@ -103,14 +104,13 @@ bool yesOrNo_evaluate()
     }
 }
 
-//The "main" function call. It will call all the functions.
-void display_run(void) {
+void display_run(void) 
+{
+	printf("Welcome to your Raspberry Tea-Pi Experience! Please type using your PS/2 Keyboard.\n");
 
     teaStruct todaysTea;
     teaStruct currTea;
-
     isTea = false;
-    printf("Welcome to your Raspberry Pi-Tea Experience! Please type using your PS/2 Keyboard.\n");
 
     while (!isTea) 
     {
@@ -121,49 +121,40 @@ void display_run(void) {
 
     todaysTea = currTea;
 
-    printf("Your tea will brew at this temperature: %d.\n", todaysTea.teaTempMax);
-
     printf("%s Tea is a great choice!\n", todaysTea.teaType);
 
     while(yesOrNo_evaluate() == false) {}
 
-    printf("Heating up the water!\n");
+    printf("Heating up the water.\n");
 
     ds18b20_t dev;
     ds18b20_init(&dev);
     dev.pin = GPIO_PIN4;
 
-    int currTemp16 = ds18b20_read_temperature(&dev); //Replace with the temperature read from the sensor
-    int tempint = currTemp16 / 16;
-    int tempfrac = currTemp16 & 0x0f;
-    int currTemp = (double) tempint + (double) tempfrac / 16.0;
+    int currTemp = getCurrTemp(dev);
 
-    int relayPin = GPIO_PIN21;             // Tells Pi the relay is connected to pin 21
-    activateSwitch(relayPin);              // Begin heating
+    int relayPin = GPIO_PIN21;
+    activateSwitch(relayPin);
 
-    printf("The starting temperature is %d.\n", currTemp);
-    printf("Your tea will brew at this temperature: %d\n", todaysTea.teaTempMax);
+    printf("The starting temperature is %d. Your tea will brew at %d degrees Celsius.\n", currTemp, todaysTea.teaTempMax);
+ 
 
     while (currTemp < todaysTea.teaTempMax)
     {
-        currTemp16 = ds18b20_read_temperature(&dev);
-        tempint = currTemp16 / 16;
-        tempfrac = currTemp16 & 0x0f;
-        currTemp = (double) tempint + (double) tempfrac / 16.0;
-
-        timer_delay(2);
+        currTemp = getCurrTemp(dev);
         printf("Current Temperature: %d\n", currTemp);
+        timer_delay(2);
     }
 
+    printf("Ideal temperature reached.\n");
     deactivateSwitch(relayPin);
 
     printf("%s\n", "Now placing tea bag into kettle.");
-
     lowerTea();
 
-    unsigned int totalSeconds = 0;
     printf("Your %s tea is brewing for the ideal time of %d minutes.\n", todaysTea.teaType, todaysTea.teaBrewTime);
 
+    unsigned int totalSeconds = 0;
     unsigned int initial_ticks = timer_get_ticks();
 
     while ((todaysTea.teaBrewTime * 60) > totalSeconds) {
@@ -173,20 +164,17 @@ void display_run(void) {
         unsigned int hundreds_seconds = (tick_value/100) % 100;
         int newTotalSeconds = unit_seconds + (tens_seconds * 10) + (hundreds_seconds * 100);
 
-        if(newTotalSeconds >= (totalSeconds+30)) {
+        if(newTotalSeconds >= (totalSeconds+60)) {
             totalSeconds = newTotalSeconds;
-            printf("It has been %d seconds.\n", totalSeconds);
+            if(totalSeconds/60 == 1) printf("It has been %d minute.\n", (totalSeconds/60));
+            else printf("It has been %d minutes.\n", (totalSeconds/60));
         }
 
-        currTemp16 = ds18b20_read_temperature(&dev);
-        tempint = currTemp16 / 16;
-        tempfrac = currTemp16 & 0x0f;
-        currTemp = (double) tempint + (double) tempfrac / 16.0;
-
-        if(currTemp > (todaysTea.teaTempMin + 5)) {
+        currTemp = getCurrTemp(dev);
+        if(currTemp > todaysTea.teaTempMax) {
             deactivateSwitch(relayPin);
         }
-        if(currTemp < todaysTea.teaTempMin) {
+        else if(currTemp < todaysTea.teaTempMin) {
             activateSwitch(relayPin);
         }
     }
@@ -194,6 +182,5 @@ void display_run(void) {
     printf("%s\n\n", "Now removing tea bag from kettle.");
     raiseTea();
 
-    printf("Your %s tea is ready!\n\n", todaysTea.teaType);
-    printf("Thank you for using the Raspberry Pi-Tea.");
+    printf("Your %s tea is ready!\nThank you for using the Tea-Pi.", todaysTea.teaType);
 }

@@ -48,9 +48,6 @@ all : $(APPLICATION).bin $(MY_MODULES)
 install: $(APPLICATION).bin
 	rpi-install.py -p $<
 
-test: tests/test_console_and_gl.bin
-	rpi-install.py -p $<
-
 clean:
 	rm -f *.o *.bin *.elf *.list *~
 

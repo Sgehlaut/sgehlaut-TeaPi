@@ -6,11 +6,11 @@
 void activateSwitch(int pin) {
 
 	gpio_set_output(pin);
-	gpio_write(pin, 1);   // Turn the relay on (HIGH is the voltage level = 1)
+	gpio_write(pin, 1);   // Turn the relay on (HIGH voltage level = 1)
 }
 
 void deactivateSwitch(int pin) {
 
 	gpio_set_output(pin);
-	gpio_write(pin, 0);   // Turn the relay off by making the voltage LOW = 0
+	gpio_write(pin, 0);   // Turn the relay off (LOW voltage level = 0)
 }

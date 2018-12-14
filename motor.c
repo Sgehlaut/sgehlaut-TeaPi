@@ -39,9 +39,6 @@ void setPWMFreq(float freq){
   write8(PCA9685_MODE1, oldmode | 0xa0);  //  This sets the MODE1 register to turn on auto increment.
 }
 
-
-
-
 void begin(){
 	i2c_init();
 	reset(); 

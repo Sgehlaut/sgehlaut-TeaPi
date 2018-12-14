@@ -1,19 +1,19 @@
 // This file will control our display and include appropriate functions.
 
-#include "shell.h"
-#include "shell_commands.h"
-#include "uart.h"
-#include "pi.h"
+#include "display.h"
+#include "ds18b20.h"
 #include "keyboard.h"
 #include "malloc.h"
-#include "printf.h"
-#include "strings.h"
-#include "timer.h"
-#include "display.h"
 #include "motor.h"
-#include "ds18b20.h"
+#include "pi.h"
+#include "printf.h"
 #include "relay.h"
+#include "shell.h"
+#include "shell_commands.h"
+#include "strings.h"
 #include "temperature.h"
+#include "timer.h"
+#include "uart.h"
 
 static const teaStruct teaList[] = {
     {"Black", 93, 99, 4},
@@ -40,11 +40,17 @@ static char *strndup(const char *src, int n)
     return memcpy(dst, src, n);
 }
 
+/*
+ * Returns 1 if the character of a given string is a space.
+ */
 static int isspace(char ch)
 {
     return ch == ' ' || ch == '\t' || ch == '\n';
 }
 
+/*
+ * Turns the words of a given input line into an array of the words without spaces.
+ */
 static int tokenize(const char *line, const char *array[], int max)
 {
     int ntokens = 0;
@@ -87,6 +93,8 @@ teaStruct teaType_evaluate(const char *teaName, teaStruct currTea)
     }
 }
 
+// This function returns true if the user inputs "Yes" in response
+// to the query, and false if the user inputs anything else.
 bool yesOrNo_evaluate() 
 {
     char bagConfirmation[LINE_LEN];

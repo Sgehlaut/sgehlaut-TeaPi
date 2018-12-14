@@ -4,6 +4,7 @@
  *
  * Authored by Anna
  * Bug fix by Chris Gregg and Tom Welch
+ * Modified to fit our code by Medha :)
  *
  */
 
@@ -61,6 +62,7 @@ static volatile struct I2C *i2c = (struct I2C *) BSC_BASE;
 #define NORM_DELAY 500
 
 void i2c_init(void) {
+    //sets gpio pina to sda and scl
     gpio_set_function(SDA, GPIO_FUNC_ALT0);
     gpio_set_function(SCL, GPIO_FUNC_ALT0);
     i2c->control = CONTROL_ENABLE;

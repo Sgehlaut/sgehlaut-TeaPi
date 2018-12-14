@@ -24,15 +24,12 @@
 /* Function: begin() 
 * Method: sets up the I2C interface and the hardware 
 */ 
-
 void begin(void); 
-
 
 /* Function: reset() 
 * Method: Sends a reset command to the PCA9685 chip over I2C
 */ 
 void reset(void); 
-
 
 /* Function: setPWM 
 * Method: Sets the PWM output of one of the PCA9685 pins
@@ -43,32 +40,30 @@ void reset(void);
 void setPWM(uint8_t num, uint16_t on, uint16_t off); 
 
 
-
 /* setPWMFreq 
 *  @brief  Sets the PWM frequency for the entire chip, up to ~1.6 KHz
 *  @param  freq Floating point frequency that we will attempt to match
 */ 
 void setPWMFreq(float freq); 
 
-
 /* Method: read8 
-* Description: reads a btye of data 
+* Description: reads a byte of data 
 */ 
 uint8_t read8(uint8_t addr); 
 
-
 /* write8
-* Method: writes the functuins 
+* Method: writes the functions 
 */ 
 void write8(uint8_t addr, uint8_t d); 
 
-
-/* teaBagFunction
-*
+/* lowerTea
+* For a set PWM and set time, lowers the tea bag for our specific set up.
 */
-
 void lowerTea(void);
 
+/* raiseTea
+* For a set PWM and set time, raises the tea bag for our specific set up.
+*/
 void raiseTea(void);
 
 #endif 
